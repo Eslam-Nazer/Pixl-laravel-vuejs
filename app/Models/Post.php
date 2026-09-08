@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Database\Factories\PostFactory;
@@ -77,12 +79,12 @@ class Post extends Model
         ]);
     }
 
-    public static function reply(Profile $profile, Post $original, string $content): self
+    public static function reply(Profile $profile, Post $post, string $content): self
     {
         return static::create([
             'profile_id' => $profile->id,
             'content' => $content,
-            'parent_id' => $original->id,
+            'parent_id' => $post->id,
             'repost_of_id' => null,
         ]);
     }

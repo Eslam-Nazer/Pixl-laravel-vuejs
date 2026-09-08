@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Queries;
 
 use App\Models\Post;
@@ -11,21 +13,21 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class TimelineQuery
 {
     public function __construct(
-        private Profile $viewer,
+        private Profile $profile,
     ) {}
 
-    public static function forViewer(Profile $viewer): self
+    public static function forViewer(Profile $profile): self
     {
-        return new self($viewer);
+        return new self($profile);
     }
 
     private function baseQuery(): Builder
     {
-        $followingIds = $this->viewer->following()
+        $followingIds = $this->profile->following()
             ->pluck('following_profile_id')
-            ->prepend($this->viewer->id);
+            ->prepend($this->profile->id);
 
-        $posts = Post::whereIn('profile_id', $followingIds)
+        return Post::whereIn('profile_id', $followingIds)
             ->whereNull('parent_id')
             ->with([
                 'profile',
@@ -35,30 +37,28 @@ class TimelineQuery
             ])
             ->withCount(['replies', 'likes', 'reposts'])
             ->withExists([
-                'likes as has_liked' => fn (Builder $query) => $query->where('profile_id', $this->viewer->id),
-                'reposts as has_reposts' => fn (Builder $query) => $query->where('profile_id', $this->viewer->id),
-                'repostOf as like_original' => fn (Builder $query) => $query
-                    ->whereHas('likes', fn (Builder $query) => $query->where('profile_id', $this->viewer->id)),
-                'repostOf as repost_original' => fn (Builder $query) => $query
-                    ->whereHas('reposts', fn (Builder $query) => $query->where('profile_id', $this->viewer->id)),
+                'likes as has_liked' => fn (Builder $builder) => $builder->where('profile_id', $this->profile->id),
+                'reposts as has_reposts' => fn (Builder $builder) => $builder->where('profile_id', $this->profile->id),
+                'repostOf as like_original' => fn (Builder $builder) => $builder
+                    ->whereHas('likes', fn (Builder $builder) => $builder->where('profile_id', $this->profile->id)),
+                'repostOf as repost_original' => fn (Builder $builder) => $builder
+                    ->whereHas('reposts', fn (Builder $builder) => $builder->where('profile_id', $this->profile->id)),
             ])
             ->latest();
-
-        return $posts;
     }
 
     public function get(): Collection
     {
         return $this->baseQuery()
             ->get()
-            ->map(fn (Post $post) => $this->normalize($post));
+            ->map(fn (Post $post): Post => $this->normalize($post));
     }
 
     public function paginate(int $perPage = 20): LengthAwarePaginator
     {
         return $this->baseQuery()
             ->paginate($perPage)
-            ->through(fn (Post $post) => $this->normalize($post));
+            ->through(fn (Post $post): Post => $this->normalize($post));
     }
 
     private function normalize(Post $post): Post

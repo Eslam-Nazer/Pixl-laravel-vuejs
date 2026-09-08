@@ -35,7 +35,6 @@ test('Post can have many replies', function () {
         ->and($originalPost->replies->contains($replies->first()))->toBeTrue();
 });
 
-
 test('Create plane repost', function () {
     $original = Post::factory()->create();
     $repostProfile = Profile::factory()->create();
@@ -70,10 +69,10 @@ test('Prevent duplicate reposts', function () {
     $original = Post::factory()->create();
     $profile = Profile::factory()->create();
 
-    $repost1 = Post::repost($profile, $original);
+    $post = Post::repost($profile, $original);
     $repost2 = Post::repost($profile, $original);
 
-    expect($repost1->id)->toBe($repost2->id);
+    expect($post->id)->toBe($repost2->id);
 });
 
 test('Remove repost', function () {

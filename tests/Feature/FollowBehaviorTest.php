@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 test('A profile can not follow same profile', function () {
     $profile = Profile::factory()->create();
 
-    expect(fn () => Follow::createFollow($profile, $profile))
+    expect(fn (): Follow => Follow::createFollow($profile, $profile))
         ->toThrow(InvalidArgumentException::class, 'A profile can not follow same profile');
 });
 

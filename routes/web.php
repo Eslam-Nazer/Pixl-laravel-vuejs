@@ -3,36 +3,40 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function (): Factory|View {
     return view('welcome');
 });
 
-Route::get('/dev/login', function () {
-    $user = User::find(id: 3);
+if (app()->isLocal()) {
+    Route::get('/dev/login', function () {
+        $user = User::find(id: 3);
 
-    Auth::login($user);
-    request()->session()->regenerate();
+        Auth::login($user);
+        request()->session()->regenerate();
 
-    return redirect()->intended(route('profiles.show', $user->profile));
-})->name('login');
+        return redirect()->intended(route('profiles.show', $user->profile));
+    })->name('login');
 
-Route::get('/dev/logout', function () {
-    Auth::logout();
+    Route::get('/dev/logout', function () {
+        Auth::logout();
 
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
 
-    return redirect()->intended('/feed');
-});
+        return redirect()->intended('/feed');
+    });
+}
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function (): void {
     Route::get('/home', [PostController::class, 'index'])->name('posts.index');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 
-    Route::scopeBindings()->group(function () {
+    Route::scopeBindings()->group(function (): void {
         Route::post('/{profile:handle}/status/{post}/reply', [PostController::class, 'reply'])
             ->name('posts.reply');
 
@@ -60,6 +64,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/{profile:handle}', [ProfileController::class, 'show'])->name('profiles.show');
 Route::get('/{profile:handle}/with-replies', [ProfileController::class, 'replies'])->name('profiles.replies');
 
-Route::scopeBindings()->group(function () {
+Route::scopeBindings()->group(function (): void {
     Route::get('/{profile:handle}/status/{post}', [PostController::class, 'show'])->name('posts.show');
 });

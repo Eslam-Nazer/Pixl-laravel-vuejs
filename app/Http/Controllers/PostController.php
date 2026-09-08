@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
@@ -8,6 +10,7 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Queries\PostThreadQuery;
 use App\Queries\TimelineQuery;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -15,35 +18,35 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(): Factory|View
     {
         $profile = Auth::user()->profile;
 
         $posts = TimelineQuery::forViewer($profile)->get();
 
-        return view('posts.index', compact('posts', 'profile'));
+        return view('posts.index', ['posts' => $posts, 'profile' => $profile]);
     }
 
     public function show(Profile $profile, Post $post): View
     {
         $post = PostThreadQuery::for($post, Auth::user()?->profile)->load();
 
-        return view('posts.show', compact('post'));
+        return view('posts.show', ['post' => $post]);
     }
 
-    public function store(CreatePostRequest $request): RedirectResponse
+    public function store(CreatePostRequest $createPostRequest): RedirectResponse
     {
-        $profile = $request->user()->profile;
+        $profile = $createPostRequest->user()->profile;
 
-        $post = Post::publish($profile, $request->input('content'));
+        Post::publish($profile, $createPostRequest->input('content'));
 
         return redirect()->route('posts.index');
     }
 
-    public function reply(CreatePostRequest $request, Profile $profile, Post $post): RedirectResponse
+    public function reply(CreatePostRequest $createPostRequest, Profile $profile, Post $post): RedirectResponse
     {
-        $authProfile = $request->user()->profile;
-        $reply = Post::reply($authProfile, $post, $request->input('content'));
+        $authProfile = $createPostRequest->user()->profile;
+        Post::reply($authProfile, $post, $createPostRequest->input('content'));
 
         return redirect()->route('posts.index');
     }
@@ -52,16 +55,16 @@ class PostController extends Controller
     {
         $authProfile = Auth::user()->profile;
 
-        $post = Post::repost($authProfile, $post);
+        Post::repost($authProfile, $post);
 
         return redirect()->route('posts.index');
     }
 
-    public function quote(Profile $profile, Post $post, CreatePostRequest $request): RedirectResponse
+    public function quote(Profile $profile, Post $post, CreatePostRequest $createPostRequest): RedirectResponse
     {
-        $authProfile = $request->user()->profile;
+        $authProfile = $createPostRequest->user()->profile;
 
-        $post = Post::repost($authProfile, $post, $request->input('content'));
+        Post::repost($authProfile, $post, $createPostRequest->input('content'));
 
         return redirect()->route('posts.index');
     }
@@ -72,7 +75,7 @@ class PostController extends Controller
 
         $like = Like::createLike($authProfile, $post);
 
-        return response()->json(compact('like'));
+        return response()->json(['like' => $like]);
     }
 
     public function unlike(Profile $profile, Post $post): JsonResponse
@@ -81,7 +84,7 @@ class PostController extends Controller
 
         $success = Like::removeLike($authProfile, $post);
 
-        return response()->json(compact('success'));
+        return response()->json(['success' => $success]);
     }
 
     public function destroy(Profile $profile, Post $post): JsonResponse
@@ -92,7 +95,7 @@ class PostController extends Controller
         if ($authProfile->id === $post->profile_id) {
             $success = $post->delete() > 0;
 
-            return response()->json(compact('success'));
+            return response()->json(['success' => $success]);
         }
 
         $repost = $post->reposts()->where('profile_id', $authProfile->id)->first();
@@ -100,9 +103,9 @@ class PostController extends Controller
         if (! is_null($repost)) {
             $success = $repost->delete() > 0;
 
-            return response()->json(compact('success'));
+            return response()->json(['success' => $success]);
         }
 
-        return response()->json(compact('success'));
+        return response()->json(['success' => $success]);
     }
 }

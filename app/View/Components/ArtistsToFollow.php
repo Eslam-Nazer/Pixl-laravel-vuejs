@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
 use App\Models\Profile;
@@ -38,6 +40,6 @@ class ArtistsToFollow extends Component
             ->take(4)
             ->get();
 
-        return view('components.artists-to-follow', compact('profiles'));
+        return view('components.artists-to-follow', ['profiles' => $profiles]);
     }
 }

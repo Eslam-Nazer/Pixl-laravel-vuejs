@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Queries;
 
 use App\Models\Post;
@@ -10,10 +12,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProfileWithRepliesQuery
 {
-
     public function __construct(
-      private Profile $subject,
-      private ?Profile $viewer,
+        private Profile $profile,
     ) {}
 
     public static function for(Profile $subject, ?Profile $viewer): self
@@ -25,11 +25,11 @@ class ProfileWithRepliesQuery
     {
         return Post::query()
             ->where(fn ($builder) => $builder
-                ->whereBelongsTo($this->subject, 'profile')
+                ->whereBelongsTo($this->profile, 'profile')
                 ->whereNull('parent_id')
             )
             ->orWhereHas('replies', fn ($builder) => $builder
-                ->whereBelongsTo($this->subject, 'profile')
+                ->whereBelongsTo($this->profile, 'profile')
             )
             ->with([
                 'profile',
@@ -37,18 +37,18 @@ class ProfileWithRepliesQuery
                 'repostOf.profile',
                 'parent.profile',
                 'replies' => fn ($query) => $query
-                    ->whereBelongsTo($this->subject, 'profile')
+                    ->whereBelongsTo($this->profile, 'profile')
                     ->with('profile')
                     ->oldest(),
             ])
             ->withCount(['likes', 'reposts', 'replies'])
             ->withExists([
-                'likes as has_liked' => fn (Builder $query) => $query->where('profile_id', $viewerId),
-                'reposts as has_reposts' => fn (Builder $query) => $query->where('profile_id', $viewerId),
-                'repostOf as like_original' => fn (Builder $query) => $query
-                    ->whereHas('likes', fn (Builder $query) => $query->where('profile_id', $viewerId)),
-                'repostOf as repost_original' => fn (Builder $query) => $query
-                    ->whereHas('reposts', fn (Builder $query) => $query->where('profile_id', $viewerId)),
+                'likes as has_liked' => fn (Builder $builder) => $builder->where('profile_id', $viewerId),
+                'reposts as has_reposts' => fn (Builder $builder) => $builder->where('profile_id', $viewerId),
+                'repostOf as like_original' => fn (Builder $builder) => $builder
+                    ->whereHas('likes', fn (Builder $builder) => $builder->where('profile_id', $viewerId)),
+                'repostOf as repost_original' => fn (Builder $builder) => $builder
+                    ->whereHas('reposts', fn (Builder $builder) => $builder->where('profile_id', $viewerId)),
             ])
             ->latest();
     }
@@ -57,14 +57,14 @@ class ProfileWithRepliesQuery
     {
         return $this->baseQuery()
             ->get()
-            ->map(fn (Post $post) => $this->normalize($post));
+            ->map(fn (Post $post): Post => $this->normalize($post));
     }
 
     public function paginate(int $perPage = 20): LengthAwarePaginator
     {
         return $this->baseQuery()
             ->paginate($perPage)
-            ->through(fn (Post $post) => $this->normalize($post));
+            ->through(fn (Post $post): Post => $this->normalize($post));
     }
 
     private function normalize(Post $post): Post
