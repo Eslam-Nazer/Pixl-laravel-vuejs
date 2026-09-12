@@ -8,8 +8,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function (): Factory|View {
-    return view('welcome');
+Route::get('/', function () {
+    return inertia('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
 });
 
 if (app()->isLocal()) {
