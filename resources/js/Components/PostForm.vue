@@ -9,7 +9,7 @@ defineProps({
     <div
         class="border-pixl-light/10 mt-8 flex items-start gap-4 border-b pb-4"
     >
-        <a class="shrink-0" href="{{ route('profiles.show', $profile) }}">
+        <a class="shrink-0" :href="route('profiles.show', profile)">
             <img
                 class="size-10 object-cover"
                 :src="profile.avatar_url"
@@ -17,7 +17,7 @@ defineProps({
             />
         </a>
 
-        <form class="grow" method="POST" action="{{ route('posts.store') }}">
+        <form class="grow" method="POST" :action="route('posts.store')">
             <label class="sr-only" for="content">Post body</label>
             <textarea
                 class="w-full resize-none text-lg"

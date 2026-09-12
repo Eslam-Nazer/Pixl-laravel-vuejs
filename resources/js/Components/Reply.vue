@@ -19,7 +19,7 @@ defineProps({
             class="bg-pixl-light/10 absolute top-0 left-5 h-full w-px group-last/li:h-4"
             aria-hidden="true"
         ></div>
-        <a class="isolate shrink-0" href="{{ route('profiles.show', $post->profile)  }}">
+        <a class="isolate shrink-0" :href="route('profiles.show', post.profile)">
             <img
                 class="size-10 object-cover"
                 :src="post.profile.avatar_url"
@@ -31,17 +31,17 @@ defineProps({
                 <div class="flex items-center gap-2.5">
                     <p>
                         <a class="hover:underline"
-                           href="{{route('profiles.show', $post->profile) }}">{{ post.profile.display_name }}</a>
+                           :href="route('profiles.show', post.profile)">{{ post.profile.display_name }}</a>
                     </p>
                     <p class="text-pixl-light/40 text-xs">
-                        <a href="{{ route('posts.show', [$post->profile ,$post]) }}">
+                        <a :href="route('posts.show', [post.profile ,post])">
                             {{ post.created_at }}
                         </a>
                     </p>
                     <p>
                         <a
                             class="text-pixl-light/40 hover:text-pixl-light/60 text-xs"
-                            href="{{route('profiles.show', $post->profile) }}"
+                            :href="route('profiles.show', post.profile)"
                         >
                             {{ post.profile.handle }}
                         </a>

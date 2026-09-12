@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="color-scheme" content="dark"/>
     <title>{{ $title ?? 'PIXL' }}</title>
+    @routes
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-inertia::head/>
 </head>

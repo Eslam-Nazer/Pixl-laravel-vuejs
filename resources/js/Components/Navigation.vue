@@ -1,3 +1,5 @@
+<script setup>
+</script>
 <template>
 
     <!-- Navigation -->
@@ -54,7 +56,7 @@
             <!-- Navigation -->
             <nav class="mt-10">
                 <ul class="flex flex-col gap-3.5">
-                    <li><a class="hover:underline" href="route('posts.index')">Home</a></li>
+                    <li><a class="hover:underline" :href="route('posts.index')">Home</a></li>
                     <li><a class="hover:underline" href="#">Explore</a></li>
                     <!-- Active item -->
                     <li class="-ml-4 flex items-center gap-2">
