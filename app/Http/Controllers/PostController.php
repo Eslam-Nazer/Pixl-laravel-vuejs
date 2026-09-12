@@ -15,16 +15,17 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Response;
 
 class PostController extends Controller
 {
-    public function index(): Factory|View
+    public function index(): Response
     {
         $profile = Auth::user()->profile;
 
         $posts = TimelineQuery::forViewer($profile)->get();
 
-        return view('posts.index', ['posts' => $posts, 'profile' => $profile]);
+        return inertia('Posts/Index', ['posts' => $posts, 'profile' => $profile]);
     }
 
     public function show(Profile $profile, Post $post): View
