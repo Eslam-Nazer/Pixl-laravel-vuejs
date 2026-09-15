@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Queries\PostThreadQuery;
 use App\Queries\TimelineQuery;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,13 +18,13 @@ use Inertia\Response;
 
 class PostController extends Controller
 {
-    public function index(): Response
+    public function index()
     {
         $profile = Auth::user()->profile;
 
         $posts = TimelineQuery::forViewer($profile)->get();
 
-        return inertia('Posts/Index', ['posts' => $posts, 'profile' => $profile]);
+        return inertia('Posts/Index', ['posts' => $posts->toResourceCollection(), 'profile' => $profile->toResource()]);
     }
 
     public function show(Profile $profile, Post $post): View

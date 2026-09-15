@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'display_name', 'avatar_url', 'bio'])]
+#[Fillable(['user_id', 'display_name', 'handle', 'bio', 'avatar_url', 'cover_url'])]
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */

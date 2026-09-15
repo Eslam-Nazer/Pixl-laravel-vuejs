@@ -12,7 +12,7 @@ defineProps({
     <div
         class="border-pixl-light/10 mt-8 flex items-start gap-4 border-b pb-4"
     >
-        <a class="shrink-0" :href="route('profiles.show', profile)">
+        <a class="shrink-0" :href="route('profiles.show', { handle: profile.handle })">
             <img
                 class="size-10 object-cover"
                 :src="profile.avatar_url"
