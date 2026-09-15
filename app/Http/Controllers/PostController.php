@@ -40,7 +40,7 @@ class PostController extends Controller
 
         Post::publish($profile, $createPostRequest->input('content'));
 
-        return redirect()->route('posts.index');
+        return to_route('posts.index');
     }
 
     public function reply(CreatePostRequest $createPostRequest, Profile $profile, Post $post): RedirectResponse
@@ -48,7 +48,7 @@ class PostController extends Controller
         $authProfile = $createPostRequest->user()->profile;
         Post::reply($authProfile, $post, $createPostRequest->input('content'));
 
-        return redirect()->route('posts.index');
+        return to_route('posts.index');
     }
 
     public function repost(Profile $profile, Post $post): RedirectResponse
@@ -57,7 +57,7 @@ class PostController extends Controller
 
         Post::repost($authProfile, $post);
 
-        return redirect()->route('posts.index');
+        return to_route('posts.index');
     }
 
     public function quote(Profile $profile, Post $post, CreatePostRequest $createPostRequest): RedirectResponse
@@ -66,7 +66,7 @@ class PostController extends Controller
 
         Post::repost($authProfile, $post, $createPostRequest->input('content'));
 
-        return redirect()->route('posts.index');
+        return to_route('posts.index');
     }
 
     public function like(Profile $profile, Post $post): RedirectResponse

@@ -18,35 +18,30 @@ defineProps({
                     <ul class="flex min-w-max justify-end gap-8 text-sm">
                         <li><a class="hover:underline" href="#">For you</a></li>
                         <li>
-                            <a
-                                class="text-pixl-light/60 hover:text-pixl-light/80 hover:underline"
-                                href="#"
-                            >Idea streams</a
-                            >
+                            <a class="text-pixl-light/60 hover:text-pixl-light/80 hover:underline" href="#">
+                                Idea streams
+                            </a>
                         </li>
                         <li>
-                            <a
-                                class="text-pixl-light/60 hover:text-pixl-light/80 hover:underline"
-                                href="#"
-                            >Following</a
-                            >
+                            <a class="text-pixl-light/60 hover:text-pixl-light/80 hover:underline"
+                                href="#">Following</a>
                         </li>
                     </ul>
                 </nav>
             </div>
 
-            <PostForm :profile="profile"/>
+            <PostForm :profile="profile" />
 
             <!-- Feed -->
             <ol class="mt-4">
                 <!-- Feed item -->
-                <Post v-for="item in posts" :key="item.id" :post="item"/>
+                <Post v-for="item in posts" :key="item.id" :post="item" />
             </ol>
 
             <!-- Content Footer -->
             <footer class="mt-10 ml-14">
                 <p class="text-center">That's all, folks</p>
-                <hr class="border-pixl-light/10 my-4"/>
+                <hr class="border-pixl-light/10 my-4" />
                 <!-- White noise -->
                 <div class="h-20 bg-[url(/resources/images/white-noise.gif)]"></div>
             </footer>
