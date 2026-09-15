@@ -18,7 +18,7 @@ use Inertia\Response;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $profile = Auth::user()->profile;
 
@@ -69,22 +69,22 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function like(Profile $profile, Post $post): JsonResponse
+    public function like(Profile $profile, Post $post): RedirectResponse
     {
         $authProfile = Auth::user()->profile;
 
-        $like = Like::createLike($authProfile, $post);
+        Like::createLike($authProfile, $post);
 
-        return response()->json(['like' => $like]);
+        return back();
     }
 
-    public function unlike(Profile $profile, Post $post): JsonResponse
+    public function unlike(Profile $profile, Post $post): RedirectResponse
     {
         $authProfile = Auth::user()->profile;
 
-        $success = Like::removeLike($authProfile, $post);
+        Like::removeLike($authProfile, $post);
 
-        return response()->json(['success' => $success]);
+        return back();
     }
 
     public function destroy(Profile $profile, Post $post): JsonResponse

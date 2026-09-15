@@ -17,16 +17,18 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'content' => $this->content,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at,
             'profile' => new ProfileResource($this->whenLoaded('profile')),
-            'replies' => PostResource::collection($this->whenLoaded('replies')),
-            'reposts' => PostResource::collection($this->whenLoaded('reposts')),
             'repost_of' => new PostResource($this->whenLoaded('repostOf')),
-            'likes' => LikeResource::collection($this->whenLoaded('likes')),
+            'replies' => PostResource::collection($this->whenLoaded('replies')),
             'replies_count' => $this->whenCounted('replies'),
+            'reposts' => PostResource::collection($this->whenLoaded('reposts')),
             'reposts_count' => $this->whenCounted('reposts'),
+            'has_reposted' => $this->has_reposted,
+            'likes' => LikeResource::collection($this->whenLoaded('likes')),
             'likes_count' => $this->whenCounted('likes'),
+            'has_liked' => $this->has_liked,
         ];
     }
 }

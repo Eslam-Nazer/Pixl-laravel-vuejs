@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import ArtistsToFollow from './ArtistsToFollow.vue';
+
+</script>
+
 <template>
 
     <aside
@@ -11,7 +16,8 @@
         />
         <hr class="border-pixl-light/10 mt-2 border"/>
         <!-- Artists to follow -->
-        <x-artists-to-follow />
+        <!-- <x-artists-to-follow /> -->
+         <ArtistsToFollow />
 
         <!-- Follow idea streams -->
         <div class="border-pixl-light/10 mt-4 border p-4">

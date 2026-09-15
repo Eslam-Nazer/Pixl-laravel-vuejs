@@ -38,6 +38,6 @@ class Like extends Model
     {
         return static::where('profile_id', $profile->id)
             ->where('post_id', $post->id)
-            ->delete();
+            ->delete() > 0;
     }
 }
