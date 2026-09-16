@@ -1,11 +1,14 @@
 <script setup>
 import ImageIcon from "@/Components/Icons/ImageIcon.vue";
 import VideoIcon from "@/Components/Icons/VideoIcon.vue";
+import { Form } from "@inertiajs/vue3";
 
 defineProps({
     profile: Object,
     post: Object,
 });
+
+let emit = defineEmits(["success"]);
 </script>
 
 <template>
@@ -20,8 +23,14 @@ defineProps({
             />
         </a>
 
-        <form class="grow" method="POST" :action="route('posts.reply', {profile: profile, post: post})">
-
+        <Form
+            class="grow"
+            method="POST"
+            :action="route('posts.reply', [post.profile, post])"
+            reset-on-success
+            #default="{ errors }"
+            @success="emit('success')"
+        >
             <label class="sr-only" for="content">Reply body</label>
             <textarea
                 class="w-full resize-none text-lg"
@@ -30,6 +39,13 @@ defineProps({
                 :placeholder="`Reply to ${post.profile.display_name}'s post`"
                 rows="5"
             ></textarea>
+
+            <div
+                class="text-xs text-red-500 mb-3"
+                v-if="errors.content"
+                v-text="errors.content"
+            />
+
             <div class="flex items-center justify-between gap-4">
                 <div class="flex gap-4">
                     <button type="button">
@@ -46,7 +62,6 @@ defineProps({
                     Post
                 </button>
             </div>
-        </form>
+        </Form>
     </div>
-
 </template>
