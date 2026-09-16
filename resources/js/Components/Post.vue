@@ -7,6 +7,8 @@ import SaveButton from "@/Components/SaveButton.vue";
 import Reply from "@/Components/Reply.vue";
 import ReplyForm from "./ReplyForm.vue";
 import { ref } from "vue";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
     post: Object,
@@ -57,21 +59,68 @@ let showReplyForm = ref(false);
                             </a>
                         </p>
                     </div>
-                    <button
-                        class="group flex gap-0.75 py-2"
-                        type="button"
-                        aria-label="Post options"
-                    >
-                        <span
-                            class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
-                        ></span>
-                        <span
-                            class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
-                        ></span>
-                        <span
-                            class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
-                        ></span>
-                    </button>
+
+                    <Menu as="div" class="relative inline-block">
+                        <MenuButton
+                            class="group flex gap-0.75 py-2 w-full justify-center rounded-md px-3 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5"
+                        >
+                            <span
+                                class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
+                            ></span>
+                            <span
+                                class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
+                            ></span>
+                            <span
+                                class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
+                            ></span>
+                        </MenuButton>
+
+                        <transition
+                            enter-active-class="transition ease-out duration-100"
+                            enter-from-class="transform opacity-0 scale-95"
+                            enter-to-class="transform scale-100"
+                            leave-active-class="transition ease-in duration-75"
+                            leave-from-class="transform scale-100"
+                            leave-to-class="transform opacity-0 scale-95"
+                        >
+                            <MenuItems
+                                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-pixl-dark outline-1 -outline-offset-1 outline-white/10"
+                            >
+                                <div class="py-1">
+                                    <MenuItem v-slot="{ active }">
+                                        <Link
+                                            :href="
+                                                route('posts.show', [
+                                                    post.profile,
+                                                    post,
+                                                ])
+                                            "
+                                            class="block px-4 py-2 text-sm"
+                                            >View Post</Link
+                                        >
+                                    </MenuItem>
+
+                                    <MenuItem
+                                        v-slot="{ active }"
+                                        v-if="post.can.update"
+                                    >
+                                        <Link
+                                            :href="
+                                                route('posts.destroy', [
+                                                    post.profile,
+                                                    post,
+                                                ])
+                                            "
+                                            method="POST"
+                                            as="button"
+                                            class="block px-4 py-2 text-sm"
+                                            >Delete</Link
+                                        >
+                                    </MenuItem>
+                                </div>
+                            </MenuItems>
+                        </transition>
+                    </Menu>
                 </div>
                 <!-- Post content -->
                 <div

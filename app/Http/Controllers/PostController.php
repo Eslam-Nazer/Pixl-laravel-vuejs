@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Queries\PostThreadQuery;
 use App\Queries\TimelineQuery;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
@@ -88,25 +87,16 @@ class PostController extends Controller
         return back();
     }
 
-    public function destroy(Profile $profile, Post $post): JsonResponse
+    public function destroy(Profile $profile, Post $post): RedirectResponse
     {
         $authProfile = Auth::user()->profile;
-        $success = false;
 
-        if ($authProfile->id === $post->profile_id) {
-            $success = $post->delete() > 0;
-
-            return response()->json(['success' => $success]);
+        if (Auth::user()->can('update', $post)) {
+            $post->delete();
         }
 
-        $repost = $post->reposts()->where('profile_id', $authProfile->id)->first();
+        $post->reposts()->where('profile_id', $authProfile->id)->first()?->delete();
 
-        if (! is_null($repost)) {
-            $success = $repost->delete() > 0;
-
-            return response()->json(['success' => $success]);
-        }
-
-        return response()->json(['success' => $success]);
+        return back();
     }
 }
