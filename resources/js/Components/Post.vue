@@ -121,7 +121,7 @@ let showReplyForm = ref(false);
                 <Reply
                     v-for="reply in post.replies"
                     :post="reply"
-                    :show-engagement="showEngagement"
+                    :show-engagement="false"
                     :show-replies="showReplies"
                 />
             </ol>

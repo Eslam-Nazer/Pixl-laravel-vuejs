@@ -1,8 +1,9 @@
 <script setup>
 import Logo from "@/Components/Icons/Logo.vue";
+import { Link } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
 </script>
 <template>
-
     <!-- Navigation -->
     <header
         class="my-4 hidden w-48 shrink-0 flex-col justify-between gap-8 pl-4 sm:flex xl:ml-40"
@@ -15,7 +16,16 @@ import Logo from "@/Components/Icons/Logo.vue";
             <!-- Navigation -->
             <nav class="mt-10">
                 <ul class="flex flex-col gap-3.5">
-                    <li><a class="hover:underline" :href="route('posts.index')">Home</a></li>
+                    <li>
+                        <a
+                            class="hover:underline"
+                            :href="route('posts.index')"
+                            :class="{
+                                'text-pixl': $page.component === 'Posts/Index',
+                            }"
+                            >Home</a
+                        >
+                    </li>
                     <li><a class="hover:underline" href="#">Explore</a></li>
                     <!-- Active item -->
                     <li class="-ml-4 flex items-center gap-2">
@@ -35,31 +45,39 @@ import Logo from "@/Components/Icons/Logo.vue";
 
         <!--! User controls -->
         <div class="flex flex-col gap-6">
-            <button
-                class="bg-pixl hover:bg-pixl/90 text-pixl-dark border-transparent px-4 py-2 transition-colors"
+            <Link
+                :href="route('posts.index')"
+                v-show="$page.component !== 'Posts/Index'"
+                class="bg-pixl hover:bg-pixl/90 text-pixl-dark border-transparent px-4 py-2 transition-colors text-center"
             >
                 Post
-            </button>
+            </Link>
             <div class="flex gap-3.5">
-                <a href="/profile.blade">
+                <a
+                    :href="
+                        route('profiles.show', [$page.props.auth.user.profile])
+                    "
+                >
                     <img
-                        src="/images/adrian.png"
-                        alt="Image for Adrian"
+                        :src="$page.props.auth.user.profile.avatar_url"
+                        :alt="`Image for ${$page.props.auth.user.profile.handle}`"
                         class="size-12 shrink-0 object-cover"
                     />
                 </a>
                 <div class="flex flex-col gap-1 text-sm">
-                    <p>_adrian</p>
-                    <p class="text-pixl-light/60">@tudssss</p>
+                    <p>{{ $page.props.auth.user.profile.display_name }}</p>
+                    <p class="text-pixl-light/60">
+                        @{{ $page.props.auth.user.profile.handle }}
+                    </p>
                 </div>
                 <button
                     class="group flex gap-0.75 py-2"
                     type="button"
                     aria-label="Post options"
                 >
-              <span
-                  class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
-              ></span>
+                    <span
+                        class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
+                    ></span>
                     <span
                         class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
                     ></span>
@@ -70,5 +88,4 @@ import Logo from "@/Components/Icons/Logo.vue";
             </div>
         </div>
     </header>
-
 </template>

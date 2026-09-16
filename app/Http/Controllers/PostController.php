@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Queries\PostThreadQuery;
 use App\Queries\TimelineQuery;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +26,13 @@ class PostController extends Controller
         return inertia('Posts/Index', ['posts' => $posts->toResourceCollection(), 'profile' => $profile->toResource()]);
     }
 
-    public function show(Profile $profile, Post $post): View
+    public function show(Profile $profile, Post $post): Response
     {
         $post = PostThreadQuery::for($post, Auth::user()?->profile)->load();
 
-        return view('posts.show', ['post' => $post]);
+        return inertia('Posts/Show', [
+            'post' => $post->toResource(),
+        ]);
     }
 
     public function store(CreatePostRequest $createPostRequest): RedirectResponse
@@ -48,7 +49,7 @@ class PostController extends Controller
         $authProfile = $createPostRequest->user()->profile;
         Post::reply($authProfile, $post, $createPostRequest->input('content'));
 
-        return to_route('posts.index');
+        return back();
     }
 
     public function repost(Profile $profile, Post $post): RedirectResponse

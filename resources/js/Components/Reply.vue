@@ -7,8 +7,8 @@ import ShareButton from "@/Components/ShareButton.vue";
 
 defineProps({
     post: Object,
-    showEngagement: {type: Boolean, default: true},
-    showReplies: {type: Boolean, default: false}
+    showEngagement: { type: Boolean, default: true },
+    showReplies: { type: Boolean, default: false },
 });
 </script>
 
@@ -19,7 +19,10 @@ defineProps({
             class="bg-pixl-light/10 absolute top-0 left-5 h-full w-px group-last/li:h-4"
             aria-hidden="true"
         ></div>
-        <a class="isolate shrink-0" :href="route('profiles.show', post.profile)">
+        <a
+            class="isolate shrink-0"
+            :href="route('profiles.show', post.profile)"
+        >
             <img
                 class="size-10 object-cover"
                 :src="post.profile.avatar_url"
@@ -30,11 +33,14 @@ defineProps({
             <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-2.5">
                     <p>
-                        <a class="hover:underline"
-                           :href="route('profiles.show', post.profile)">{{ post.profile.display_name }}</a>
+                        <a
+                            class="hover:underline"
+                            :href="route('profiles.show', post.profile)"
+                            >{{ post.profile.display_name }}</a
+                        >
                     </p>
                     <p class="text-pixl-light/40 text-xs">
-                        <a :href="route('posts.show', [post.profile ,post])">
+                        <a :href="route('posts.show', [post.profile, post])">
                             {{ post.created_at }}
                         </a>
                     </p>
@@ -52,9 +58,9 @@ defineProps({
                     type="button"
                     aria-label="Post options"
                 >
-                 <span
-                     class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
-                 ></span>
+                    <span
+                        class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
+                    ></span>
                     <span
                         class="bg-pixl-light/40 group-hover:bg-pixl-light/60 size-1"
                     ></span>
@@ -63,35 +69,37 @@ defineProps({
                     ></span>
                 </button>
             </div>
-            <div class="mt-4 flex flex-col gap-3 text-sm" v-html="post.content"></div>
+            <div
+                class="mt-4 flex flex-col gap-3 text-sm"
+                v-html="post.content"
+            ></div>
 
             <!-- Actions buttons -->
-            <div v-if="showEngagement" class="mt-6 flex items-center justify-between gap-4">
+            <div
+                v-if="showEngagement"
+                class="mt-6 flex items-center justify-between gap-4"
+            >
                 <div class="flex items-center gap-8">
-                    <LikeButton
-                        :active="post.has_liked"
-                        :count="post.likes_count"
-                        :id="post.id"
-                    />
+                    <LikeButton :post="post" />
                     <ReplyButton :count="post.replies_count" :id="post.id" />
-                    <RepostButton
-                        :active="post.has_reposted"
-                        :count="post.reposts_count"
-                        :id="post.id"
-                    />
+                    <RepostButton :post="post" />
                 </div>
                 <div class="flex items-center gap-3">
-                    <SaveButton :id="post.id"/>
-                    <ShareButton :id="post.id"/>
+                    <SaveButton :id="post.id" />
+                    <ShareButton :id="post.id" />
                 </div>
             </div>
 
             <!-- Threaded replies -->
             <ol v-if="showReplies">
                 <!-- Reply -->
-                <Reply v-for="reply in post.replies" :post="reply" :show-engagement="showEngagement" :show-replies="showReplies"/>
+                <Reply
+                    v-for="reply in post.replies"
+                    :post="reply"
+                    :show-engagement="showEngagement"
+                    :show-replies="showReplies"
+                />
             </ol>
         </div>
     </li>
-
 </template>

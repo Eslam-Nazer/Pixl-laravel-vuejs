@@ -1,11 +1,9 @@
 <script setup>
-import Layout from "@/Layouts/layout.vue";
-import PostForm from "@/Components/PostForm.vue";
-import Post from "@/Components/Post.vue";
+import Layout from "@/Layouts/Layout.vue";
+import Post from "../../Components/Post.vue";
 
 defineProps({
-    profile: Object,
-    posts: Array,
+    post: Object,
 });
 </script>
 
@@ -21,9 +19,8 @@ defineProps({
                             <a
                                 class="text-pixl-light/60 hover:text-pixl-light/80 hover:underline"
                                 href="#"
+                                >Idea streams</a
                             >
-                                Idea streams
-                            </a>
                         </li>
                         <li>
                             <a
@@ -36,12 +33,9 @@ defineProps({
                 </nav>
             </div>
 
-            <PostForm :profile="profile" />
-
             <!-- Feed -->
             <ol class="mt-4">
-                <!-- Feed item -->
-                <Post v-for="item in posts" :key="item.id" :post="item" />
+                <Post :post="post" :show-replies="true" />
             </ol>
 
             <!-- Content Footer -->
