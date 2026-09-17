@@ -46,7 +46,7 @@ class ProfileController extends Controller
 
         Follow::createFollow($authProfile, $profile);
 
-        return back();
+        return back()->with('success', "You are now following {$profile->handle}!");
     }
 
     public function unfollow(Profile $profile): RedirectResponse
@@ -55,6 +55,6 @@ class ProfileController extends Controller
 
         Follow::removeFollow($authProfile, $profile);
 
-        return back();
+        return back()->with('success', "You have now unfollow {$profile->handle}.");
     }
 }
