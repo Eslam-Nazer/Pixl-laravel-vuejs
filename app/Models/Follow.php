@@ -32,7 +32,7 @@ class Follow extends Model
             throw new \InvalidArgumentException('A profile can not follow same profile');
         }
 
-        return static::create([
+        return static::firstOrCreate([
             'follower_profile_id' => $follower->id,
             'following_profile_id' => $following->id,
         ]);
@@ -46,6 +46,6 @@ class Follow extends Model
 
         return static::where('follower_profile_id', $follower->id)
             ->where('following_profile_id', $following->id)
-            ->delete();
+            ->delete() > 0;
     }
 }

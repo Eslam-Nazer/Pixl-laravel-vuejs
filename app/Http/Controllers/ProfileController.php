@@ -8,7 +8,7 @@ use App\Models\Follow;
 use App\Models\Profile;
 use App\Queries\ProfilePageQuery;
 use App\Queries\ProfileWithRepliesQuery;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
@@ -16,9 +16,11 @@ class ProfileController extends Controller
 {
     public function show(Profile $profile): Response
     {
-        $profile->loadCount(['following', 'followers']);
+        $profile->loadCount(['followings', 'followers']);
 
         $posts = ProfilePageQuery::for($profile, Auth::user()?->profile)->get();
+
+        $profile->has_followed = Auth::user()->profile->isFollowing($profile);
 
         return inertia('Profiles/Show', [
             'profile' => $profile->toResource(),
@@ -38,21 +40,21 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function follow(Profile $profile): JsonResponse
+    public function follow(Profile $profile): RedirectResponse
     {
         $authProfile = Auth::user()->profile;
 
-        $follow = Follow::createFollow($authProfile, $profile);
+        Follow::createFollow($authProfile, $profile);
 
-        return response()->json(['follow' => $follow]);
+        return back();
     }
 
-    public function unfollow(Profile $profile): JsonResponse
+    public function unfollow(Profile $profile): RedirectResponse
     {
         $authProfile = Auth::user()->profile;
 
-        $success = Follow::removeFollow($authProfile, $profile);
+        Follow::removeFollow($authProfile, $profile);
 
-        return response()->json(['success' => $success]);
+        return back();
     }
 }

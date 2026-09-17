@@ -53,17 +53,17 @@ import { route } from "ziggy-js";
                 Post
             </Link>
             <div class="flex gap-3.5">
-                <a
+                <Link
                     :href="
                         route('profiles.show', [$page.props.auth.user.profile])
                     "
                 >
                     <img
+                        class="size-12 shrink-0 object-cover"
                         :src="$page.props.auth.user.profile.avatar_url"
                         :alt="`Image for ${$page.props.auth.user.profile.handle}`"
-                        class="size-12 shrink-0 object-cover"
                     />
-                </a>
+                </Link>
                 <div class="flex flex-col gap-1 text-sm">
                     <p>{{ $page.props.auth.user.profile.display_name }}</p>
                     <p class="text-pixl-light/60">

@@ -23,7 +23,7 @@ class TimelineQuery
 
     private function baseQuery(): Builder
     {
-        $followingIds = $this->profile->following()
+        $followingIds = $this->profile->followings()
             ->pluck('following_profile_id')
             ->prepend($this->profile->id);
 

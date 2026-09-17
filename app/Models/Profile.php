@@ -48,7 +48,7 @@ class Profile extends Model
         );
     }
 
-    public function following(): BelongsToMany
+    public function followings(): BelongsToMany
     {
         return $this->belongsToMany(
             Profile::class,
@@ -56,5 +56,10 @@ class Profile extends Model
             'follower_profile_id',
             'following_profile_id'
         );
+    }
+
+    public function isFollowing(Profile $profile): bool
+    {
+        return $this->followings()->where('following_profile_id', $profile->id)->exists();
     }
 }

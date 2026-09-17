@@ -31,7 +31,7 @@ class PostResource extends JsonResource
             'likes_count' => $this->whenCounted('likes'),
             'has_liked' => $this->has_liked,
             'can' => [
-                'update' => Auth::user()->can('update', $this->resource),
+                'update' => Auth::user()?->can('update', $this->resource),
             ],
         ];
     }

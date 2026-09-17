@@ -22,6 +22,7 @@ class ProfileResource extends JsonResource
             'cover_url' => $this->cover_url,
             'followers_count' => $this->whenCounted('followers'),
             'following_count' => $this->whenCounted('following'),
+            'has_followed' => $this->has_followed ?? false,
         ];
     }
 }
