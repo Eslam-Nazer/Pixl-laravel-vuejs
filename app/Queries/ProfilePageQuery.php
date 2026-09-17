@@ -29,6 +29,7 @@ class ProfilePageQuery
         return Post::where('profile_id', $this->subject->id)
             ->whereNull('parent_id')
             ->with([
+                'profile',
                 'repostOf' => fn ($query) => $query->withCount(['likes', 'reposts', 'replies'])->with('profile'),
             ])
             ->withCount(['likes', 'reposts', 'replies'])

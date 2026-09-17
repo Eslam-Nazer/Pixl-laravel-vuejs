@@ -14,6 +14,7 @@ class ProfileWithRepliesQuery
 {
     public function __construct(
         private Profile $profile,
+        private ?Profile $viewer
     ) {}
 
     public static function for(Profile $subject, ?Profile $viewer): self
@@ -23,6 +24,8 @@ class ProfileWithRepliesQuery
 
     private function baseQuery(): Builder
     {
+        $viewerId = $this->viewer->id;
+
         return Post::query()
             ->where(fn ($builder) => $builder
                 ->whereBelongsTo($this->profile, 'profile')

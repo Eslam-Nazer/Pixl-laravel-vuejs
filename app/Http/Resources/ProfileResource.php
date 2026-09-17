@@ -20,6 +20,8 @@ class ProfileResource extends JsonResource
             'avatar_url' => $this->avatar_url,
             'bio' => $this->bio,
             'cover_url' => $this->cover_url,
+            'followers_count' => $this->whenCounted('followers'),
+            'following_count' => $this->whenCounted('following'),
         ];
     }
 }
