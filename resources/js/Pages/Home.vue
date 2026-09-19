@@ -10,7 +10,7 @@ import { route } from "ziggy-js";
         <!-- Background image -->
         <div class="absolute inset-0 overflow-clip">
             <img
-                src="/resources/images/Official-Login-BG.png"
+                src="@images/Official-Login-BG.png"
                 alt=""
                 class="absolute inset-y-0 left-[15%] h-full w-full object-cover mask-l-from-80% opacity-30"
             />
