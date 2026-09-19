@@ -4,6 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,7 @@ if (app()->isLocal()) {
         return redirect()->intended(route('profiles.show', $user->profile));
     })->name('login');
 
-    Route::get('/dev/logout', function () {
+    Route::get('/dev/logout', function (): Redirector|RedirectResponse {
         Auth::logout();
 
         request()->session()->invalidate();
