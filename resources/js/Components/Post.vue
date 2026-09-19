@@ -159,7 +159,7 @@ let showReplyForm = ref(false);
                 <ReplyForm
                     v-show="showReplyForm"
                     :post="post"
-                    :profile="$page.props.auth.user.profile"
+                    :profile="$page.props.auth.user?.profile"
                     @success="showReplyForm = false"
                 />
             </div>

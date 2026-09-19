@@ -14,6 +14,7 @@ let emit = defineEmits(["success"]);
 <template>
     <div
         class="border-pixl-light/10 bg-pixl-light/3 mt-8 flex items-start gap-4 border-t p-4"
+        v-if="$page.props.auth.user"
     >
         <a class="shrink-0" :href="route('profiles.show', profile)">
             <img

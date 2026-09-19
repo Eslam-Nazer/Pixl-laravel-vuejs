@@ -44,7 +44,7 @@ import { route } from "ziggy-js";
         </div>
 
         <!--! User controls -->
-        <div class="flex flex-col gap-6">
+        <div v-if="$page.props.auth.user" class="flex flex-col gap-6">
             <Link
                 :href="route('posts.index')"
                 v-show="$page.component !== 'Posts/Index'"

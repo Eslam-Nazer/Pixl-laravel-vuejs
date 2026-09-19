@@ -22,7 +22,7 @@ class ProfileResource extends JsonResource
             'bio' => $this->bio,
             'cover_url' => $this->cover_url,
             'followers_count' => $this->whenCounted('followers'),
-            'following_count' => $this->whenCounted('following'),
+            'following_count' => $this->whenCounted('followings'),
             'has_followed' => $this->has_followed ?? false,
         ];
     }

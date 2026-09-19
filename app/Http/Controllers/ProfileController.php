@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
         $posts = ProfilePageQuery::for($profile, Auth::user()?->profile)->get();
 
-        $profile->has_followed = Auth::user()->profile->isFollowing($profile);
+        $profile->has_followed = Auth::user()?->profile->isFollowing($profile);
 
         return inertia('Profiles/Show', [
             'profile' => $profile->toResource(),
