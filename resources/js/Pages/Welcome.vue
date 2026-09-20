@@ -1,6 +1,4 @@
 <script setup>
-import Navigation from "@/Pages/Components/Navigation.vue";
-import Aside from "@/Pages/Components/Aside.vue";
 import Layout from "@/Layouts/layout.vue";
 </script>
 <template>

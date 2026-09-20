@@ -28,7 +28,7 @@ class TimelineQuery
             ->prepend($this->profile->id);
 
         return Post::whereIn('profile_id', $followingIds)
-            ->whereNull('parent_id')
+            ->orWhereNull('parent_id')
             ->with([
                 'profile',
                 'repostOf' => fn ($query) => $query

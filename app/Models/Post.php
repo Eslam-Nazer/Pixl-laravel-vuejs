@@ -64,7 +64,7 @@ class Post extends Model
 
     public static function removeRepost(Profile $profile, self $post): bool
     {
-        return static::where('profile_id', $profile->id)
+        return (bool) static::where('profile_id', $profile->id)
             ->where('repost_of_id', $post->id)
             ->delete();
     }

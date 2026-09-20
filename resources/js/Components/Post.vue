@@ -20,7 +20,10 @@ let showReplyForm = ref(false);
 </script>
 
 <template>
-    <li class="flex items-start gap-4 not-first:pt-2.5">
+    <li
+        class="flex items-start gap-4 not-first:pt-2.5"
+        data-test="post-feed-item"
+    >
         <a class="shrink-0" :href="route('profiles.show', post.profile)">
             <img
                 class="size-10 object-cover"
@@ -46,6 +49,7 @@ let showReplyForm = ref(false);
                                 :href="
                                     route('posts.show', [post.profile, post])
                                 "
+                                data-test="visit-post-link"
                             >
                                 {{ post.created_at }}
                             </a>

@@ -46,6 +46,7 @@ defineProps({
                 "
                 method="POST"
                 class="bg-pixl-dark/50 hover:bg-pixl-dark/60 text-pixl border-pixl/50 hover:border-pixl/60 border px-2 py-1 text-sm transition-colors"
+                data-test="follow-button"
             >
                 {{ profile.has_followed ? "Unfollow" : "Follow" }}
             </Link>

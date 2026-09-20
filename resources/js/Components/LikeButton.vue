@@ -14,12 +14,14 @@ defineProps({
                 class="hover:text-pixl"
                 :class="{ 'text-pixl': post.has_liked }"
                 aria-label="Like"
+                data-test="like-post-button"
             >
                 <HeartIcon />
             </button>
             <span
                 class="text-sm hover:text-pixl"
                 :class="{ 'text-pixl': post.has_liked }"
+                data-test="like-post-count"
             >
                 {{ post.likes_count }}
             </span>
